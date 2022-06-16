@@ -3,14 +3,14 @@ package me.inbok.tobyspring.common;
 import java.sql.*;
 
 public class UserDao {
-    private SimpleConnectionMaker simpleConnectionMaker;
+    private IConnectionMaker iConnectionMaker;
 
     public UserDao(){
-        this.simpleConnectionMaker = new SimpleConnectionMaker();
+        this.iConnectionMaker = new SimpleConnectionMaker();
     }
 
     public void add(User user) throws ClassNotFoundException, SQLException {
-        Connection connection = simpleConnectionMaker.makeNewConnection();
+        Connection connection = iConnectionMaker.makeConnection();
 
         PreparedStatement ps = connection.prepareStatement(
                 "insert into users(id, name, password) values(?, ?, ?)");
@@ -25,7 +25,7 @@ public class UserDao {
     }
 
     public User get(String id)throws ClassNotFoundException, SQLException {
-        Connection connection = simpleConnectionMaker.makeNewConnection();
+        Connection connection = iConnectionMaker.makeConnection();
 
         PreparedStatement ps = connection.prepareStatement(
                 "select * from users where id = ?");
@@ -49,8 +49,8 @@ public class UserDao {
         UserDao dao = new UserDao();
 
         User user = new User();
-        user.setId("user1002");
-        user.setName("이길준");
+        user.setId("user1003");
+        user.setName("김선우");
         user.setPassword("1234");
 
         dao.add(user);
