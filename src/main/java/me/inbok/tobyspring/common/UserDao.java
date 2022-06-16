@@ -3,10 +3,14 @@ package me.inbok.tobyspring.common;
 import java.sql.*;
 
 public class UserDao {
+    private SimpleConnectionMaker simpleConnectionMaker;
+
+    public UserDao(){
+        this.simpleConnectionMaker = new SimpleConnectionMaker();
+    }
 
     public void add(User user) throws ClassNotFoundException, SQLException {
-        Class.forName("org.mariadb.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306/test", "root", "1234");
+        Connection connection = simpleConnectionMaker.makeNewConnection();
 
         PreparedStatement ps = connection.prepareStatement(
                 "insert into users(id, name, password) values(?, ?, ?)");
@@ -21,8 +25,7 @@ public class UserDao {
     }
 
     public User get(String id)throws ClassNotFoundException, SQLException {
-        Class.forName("org.mariadb.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306/test", "root", "1234");
+        Connection connection = simpleConnectionMaker.makeNewConnection();
 
         PreparedStatement ps = connection.prepareStatement(
                 "select * from users where id = ?");
@@ -46,11 +49,11 @@ public class UserDao {
         UserDao dao = new UserDao();
 
         User user = new User();
-        user.setId("nashs789");
-        user.setName("이인복");
+        user.setId("user1002");
+        user.setName("이길준");
         user.setPassword("1234");
 
-        // dao.add(user);
+        dao.add(user);
 
         System.out.println("=== Successfully add method end ===");
 
