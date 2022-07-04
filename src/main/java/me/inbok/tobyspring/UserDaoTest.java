@@ -12,12 +12,14 @@ import java.sql.SQLException;
 public class UserDaoTest {
     public static void main(String[] args) throws ClassNotFoundException, SQLException{
         // ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
-/*        ApplicationContext context = new GenericXmlApplicationContext("/applicationContext.xml");
+        ApplicationContext context = new GenericXmlApplicationContext("/applicationContext.xml");
         UserDao dao = context.getBean("userDao", UserDao.class);
 
+        dao.deleteAll();
+
         User user = new User();
-        user.setId("user1008");
-        user.setName("심창호");
+        user.setId("user1009");
+        user.setName("힘들다");
         user.setPassword("1234");
 
         dao.add(user);
@@ -28,6 +30,6 @@ public class UserDaoTest {
         System.out.println("user2.getName() = " + user2.getName());
         System.out.println("user2.getPassword() = " + user2.getPassword());
 
-        System.out.println("=== Successfully get method end ===");*/
+        System.out.println("=== Successfully get method end ===");
     }
 }
