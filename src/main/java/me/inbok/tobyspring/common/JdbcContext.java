@@ -30,4 +30,13 @@ public class JdbcContext {
             if(c != null) { try { c.close(); } catch (SQLException sqle) {} }
         }
     }
+
+    public void executeSql(final String query) throws SQLException{
+        this.workWithStatementStrategy(new StatementStrategy() {
+            @Override
+            public PreparedStatement makePrepareStatement(Connection c) throws SQLException {
+                return c.prepareStatement(query);
+            }
+        });
+    }
 }

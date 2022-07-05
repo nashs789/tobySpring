@@ -11,11 +11,6 @@
     </bean>
 
     <bean id="userDao" class="me.inbok.tobyspring.Dao.UserDao">
-        <property name="connectionMaker" ref="dataSource"></property>
-        <property name="jdbcContext" ref="jdbcContext"></property>
-    </bean>
-
-    <bean id="jdbcContext" class="me.inbok.tobyspring.common.JdbcContext">
         <property name="dataSource" ref="dataSource"></property>
     </bean>
 
