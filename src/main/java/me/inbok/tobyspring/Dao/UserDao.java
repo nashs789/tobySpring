@@ -13,70 +13,42 @@ import java.util.List;
 public class UserDao {
     private SimpleDriverDataSource dataSource;
     private JdbcTemplate jdbcTemplate;
+    private RowMapper<User> userMapper = new RowMapper<User>() {
+        @Override
+        public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+            User user = new User();
+            user.setId(rs.getString("id"));
+            user.setName(rs.getString("name"));
+            user.setPassword(rs.getString("password"));
+            return user;
+        }
+    };
 
     public void setDataSource(SimpleDriverDataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
-        this.dataSource = dataSource;
     }
 
     public void setConnectionMaker(SimpleDriverDataSource dataSource) {
         this.dataSource = dataSource;
     }
 
-    public void add(final User user) throws SQLException {
-        /*this.jdbcTemplate.update(new PreparedStatementCreator() {
-            @Override
-            public PreparedStatement createPreparedStatement(Connection c) throws SQLException {
-                PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values(?, ?, ?)");
-                ps.setString(1, user.getId());
-                ps.setString(2, user.getName());
-                ps.setString(3, user.getPassword());
-
-                return ps;
-            }
-        });*/
+    public void add(final User user){
         this.jdbcTemplate.update("insert into users(id, name, password) values(?, ?, ?)", user.getId(), user.getName(), user.getPassword());
     }
 
-    public User get(String id)throws SQLException {
-        return this.jdbcTemplate.queryForObject("select * from users where id = ?", new Object[]{id},
-                new RowMapper<User>() {
-                    @Override
-                    public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-                        User user = new User();
-                        user.setId(rs.getString("id"));
-                        user.setName(rs.getString("name"));
-                        user.setPassword(rs.getString("password"));
-                        return user;
-                    }
-                });
+    public User get(String id){
+        return this.jdbcTemplate.queryForObject("select * from users where id = ?", new Object[]{id}, this.userMapper);
     }
 
     public List<User> getAll(){
-        return this.jdbcTemplate.query("select * from users order by id", new RowMapper<User>() {
-                @Override
-                public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-                    User user = new User();
-                    user.setId(rs.getString("id"));
-                    user.setName(rs.getString("name"));
-                    user.setPassword(rs.getString("password"));
-                    return user;
-                }
-            });
+        return this.jdbcTemplate.query("select * from users order by id", this.userMapper);
     }
 
-    public void deleteAll() throws SQLException{
-        /*this.jdbcTemplate.update(new PreparedStatementCreator() {
-            @Override
-            public PreparedStatement createPreparedStatement(Connection c) throws SQLException {
-                return c.prepareStatement("delete from users");
-            }
-        });*/
+    public void deleteAll(){
         this.jdbcTemplate.update("delete from users");
     }
 
-    public int getCount() throws SQLException{
-        // 이거 익명 객체로 만드려면 query 메소드의 파라미터로 2개의 익명 객체가 필요함 = 지옥
+    public int getCount(){
         return this.jdbcTemplate.queryForObject("select count(*) from users", Integer.class);
     }
 }
